@@ -3,13 +3,13 @@
 import React, { useEffect, useState } from "react";
 import { useAuth, hasPermission, PERMISSIONS } from "@/app/contexts/AuthContext";
 import { getEvents, type Event } from "@/lib/api/events";
-import { Card, CardContent, CardHeader, CardTitle } from "@/app/components/ui/card";
+import { Card, CardContent } from "@/app/components/ui/card";
 import { Button } from "@/app/components/ui/button";
 import { Badge } from "@/app/components/ui/badge";
 import { Input } from "@/app/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/app/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/app/components/ui/table";
-import { Plus, Search, Filter, Eye, Edit, Trash2, CheckCircle, XCircle, ChevronLeft, ChevronRight } from "lucide-react";
+import { Plus, Search, Eye, Edit, Trash2, CheckCircle, XCircle, ChevronLeft, ChevronRight } from "lucide-react";
 import { Skeleton } from "@/app/components/ui/skeleton";
 import Link from "next/link";
 
@@ -17,7 +17,6 @@ export default function EventsPage() {
   const { user } = useAuth();
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [currentPage, setCurrentPage] = useState(1);
@@ -28,7 +27,7 @@ export default function EventsPage() {
   const canEditEvent = hasPermission(user?.roles || [], PERMISSIONS.EDIT_EVENT);
   const canDeleteEvent = hasPermission(user?.roles || [], PERMISSIONS.DELETE_EVENT);
   const canApproveEvent = hasPermission(user?.roles || [], PERMISSIONS.APPROVE_EVENT);
-  const canPublishEvent = hasPermission(user?.roles || [], PERMISSIONS.PUBLISH_EVENT);
+  // const canPublishEvent = hasPermission(user?.roles || [], PERMISSIONS.PUBLISH_EVENT);
 
   // Helpers to determine ownership (speculative: compare organizer_id to user?.id if available)
   const isOwner = (event: Event) => {
@@ -41,7 +40,6 @@ export default function EventsPage() {
   const loadEvents = async () => {
     try {
       setLoading(true);
-      setError(null);
 
       const response = await getEvents({
         page: currentPage,
@@ -53,7 +51,7 @@ export default function EventsPage() {
       setEvents(response.events);
       setTotalPages(response.total_pages);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to load events");
+      console.error("Failed to load events:", err);
     } finally {
       setLoading(false);
     }
@@ -61,6 +59,7 @@ export default function EventsPage() {
 
   useEffect(() => {
     loadEvents();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPage, searchTerm, statusFilter]);
 
   const getStatusBadge = (status: string, isPublished?: boolean) => {

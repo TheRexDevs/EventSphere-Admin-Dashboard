@@ -9,13 +9,13 @@ import { useAuth, hasPermission, PERMISSIONS } from "@/app/contexts/AuthContext"
 import { getEventDetails, updateEventWithFiles, type Event, type UpdateEventFormData } from "@/lib/api/events";
 import { Card, CardContent, CardHeader, CardTitle } from "@/app/components/ui/card";
 import { Button } from "@/app/components/ui/button";
-import { Textarea } from "@/app/components/ui/textarea";
 import { Skeleton } from "@/app/components/ui/skeleton";
 import { Save, Calendar, MapPin } from "lucide-react";
 import { showToast } from "@/lib/utils/toast";
 import FieldWrapper from "@/app/components/common/field-wrapper";
 import { Form } from "@/app/components/ui/form";
 import { FileUpload } from "@/app/components/ui/file-upload";
+import Image from "next/image";
 
 // Validation schema for event form (text fields only)
 const eventFormSchema = z.object({
@@ -126,7 +126,7 @@ export default function EditEventPage() {
         <Card>
           <CardContent className="p-8 text-center">
             <h2 className="text-xl font-semibold text-gray-700 mb-2">Access Denied</h2>
-            <p className="text-gray-600">You don't have permission to edit events.</p>
+            <p className="text-gray-600">You can&apos;t edit events.</p>
             <Button
               variant="outline"
               className="mt-4"
@@ -321,10 +321,12 @@ export default function EditEventPage() {
                       <label className="text-sm font-medium">Current Gallery Images</label>
                       <div className="mt-2 grid grid-cols-2 md:grid-cols-3 gap-4">
                         {event.gallery_images.map((image) => (
-                          <img
+                          <Image
                             key={image.id}
                             src={image.url}
                             alt={image.filename}
+                            width={200}
+                            height={128}
                             className="w-full h-32 object-cover rounded-lg border"
                           />
                         ))}
@@ -366,9 +368,11 @@ export default function EditEventPage() {
                     <div>
                       <label className="text-sm font-medium">Current Featured Image</label>
                       <div className="mt-2">
-                        <img
+                        <Image
                           src={event.featured_image.url}
                           alt="Current featured image"
+                          width={400}
+                          height={192}
                           className="w-full max-w-md h-48 object-cover rounded-lg border"
                         />
                       </div>

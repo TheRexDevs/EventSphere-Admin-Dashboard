@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React from "react";
 import { useRouter } from "next/navigation";
 import { SidebarProvider, SidebarInset } from "@/app/components/ui/sidebar";
 import { DashSidebar } from "./sidebar";
 import { DashHeader } from "./header"; 
-import { DashLayoutSkeleton } from "./DashLayoutSkeleton";
+// import { DashLayoutSkeleton } from "./DashLayoutSkeleton";
 
 
 export default function Dashboard({
@@ -13,9 +13,9 @@ export default function Dashboard({
 }: {
 	children: React.ReactNode;
 }) {
-	const router = useRouter();
+	// const router = useRouter();
 
-	
+
 
 	// Render the actual layout once folio data is loaded and validated
 	return (

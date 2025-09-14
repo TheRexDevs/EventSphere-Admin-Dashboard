@@ -144,8 +144,12 @@ export async function createEventWithFiles(eventData: CreateEventFormData): Prom
     tokenManager.getAuthHeader()
   );
   // Support both shapes { data: { event } } and { data: event }
-  const r: any = result as any;
-  return r?.data?.event ?? r?.data ?? r?.event ?? r;
+  const r = result as unknown as { data?: { event?: Event } | Event } | Event;
+  if (typeof r === 'object' && r && 'data' in r) {
+    const d = (r as { data: { event?: Event } | Event }).data;
+    return (d as { event?: Event })?.event ?? (d as Event);
+  }
+  return r as Event;
 }
 
 /**
@@ -222,8 +226,12 @@ export async function updateEventWithFiles(eventId: string, eventData: UpdateEve
     tokenManager.getAuthHeader()
   );
   // Support both shapes
-  const r: any = result as any;
-  return r?.data?.event ?? r?.data ?? r?.event ?? r;
+  const r = result as unknown as { data?: { event?: Event } | Event } | Event;
+  if (typeof r === 'object' && r && 'data' in r) {
+    const d = (r as { data: { event?: Event } | Event }).data;
+    return (d as { event?: Event })?.event ?? (d as Event);
+  }
+  return r as Event;
 }
 
 /**

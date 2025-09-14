@@ -7,7 +7,7 @@ import { getUserStats } from "@/lib/api/users";
 import { showToast } from "@/lib/utils/toast";
 import { Card, CardContent, CardHeader, CardTitle } from "@/app/components/ui/card";
 import { Button } from "@/app/components/ui/button";
-import { ExternalLink, Users, Calendar, CheckCircle, Clock } from "lucide-react";
+import { Users, Calendar, CheckCircle, Clock } from "lucide-react";
 import { Skeleton } from "@/app/components/ui/skeleton";
 import Link from "next/link";
 
@@ -51,15 +51,15 @@ const HomeDashboard = () => {
 
 				const results = await Promise.all(promises);
 
-				let eventData: any = null;
-				let userData: any = null;
+				let eventData: { total_events?: number; pending_events?: number; approved_events?: number } | null = null;
+				let userData: { total_users?: number } | null = null;
 
 				if (canViewEvents && results.length > 0) {
-					eventData = results[0] as any;
+					eventData = results[0] as { total_events?: number; pending_events?: number; approved_events?: number };
 				}
 
 				if (canViewUsers && results.length > (canViewEvents ? 1 : 0)) {
-					userData = results[canViewEvents ? 1 : 0] as any;
+					userData = results[canViewEvents ? 1 : 0] as { total_users?: number };
 				}
 
 				setStats({
@@ -93,7 +93,7 @@ const HomeDashboard = () => {
 					<div>
 					<h1 className="text-3xl font-bold">Dashboard</h1>
 						<p className="text-gray-600 mt-2">
-						Welcome back! Here's what's happening with your events.
+						Welcome back! Here&apos;s what&apos;s happening with your events.
 						</p>
 					</div>
 				</div>

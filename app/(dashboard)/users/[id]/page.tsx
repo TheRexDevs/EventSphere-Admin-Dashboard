@@ -3,14 +3,14 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useAuth, hasPermission, PERMISSIONS } from "@/app/contexts/AuthContext";
-import { getUserDetails, updateUserStatus, updateUserRoles, type AdminUser } from "@/lib/api/users";
+import { getUserDetails, updateUserStatus, type AdminUser } from "@/lib/api/users";
 import { Card, CardContent, CardHeader, CardTitle } from "@/app/components/ui/card";
 import { Button } from "@/app/components/ui/button";
 import { Badge } from "@/app/components/ui/badge";
-import { Separator } from "@/app/components/ui/separator";
+// import { Separator } from "@/app/components/ui/separator";
 import { Edit, UserCheck, UserX, Mail, Phone, MapPin, Calendar, Shield } from "lucide-react";
 import { Skeleton } from "@/app/components/ui/skeleton";
-import Link from "next/link";
+// import Link from "next/link";
 import { showToast } from "@/lib/utils/toast";
 
 export default function UserDetailsPage() {
@@ -25,7 +25,7 @@ export default function UserDetailsPage() {
   const userId = params.id as string;
 
   const canActivateDeactivateUsers = hasPermission(user?.roles || [], PERMISSIONS.ACTIVATE_DEACTIVATE_USERS);
-  const canUpdateUserRoles = hasPermission(user?.roles || [], PERMISSIONS.UPDATE_USER_ROLES);
+  // const canUpdateUserRoles = hasPermission(user?.roles || [], PERMISSIONS.UPDATE_USER_ROLES);
 
   useEffect(() => {
     const loadUser = async () => {

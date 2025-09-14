@@ -24,7 +24,7 @@ export default function SettingsPage() {
           <CardContent className="p-8 text-center">
             <Shield className="h-12 w-12 text-gray-400 mx-auto mb-4" />
             <h2 className="text-xl font-semibold text-gray-700 mb-2">Access Denied</h2>
-            <p className="text-gray-600">You don't have permission to access system settings.</p>
+            <p className="text-gray-600">You can&apos;t access system settings.</p>
           </CardContent>
         </Card>
       </div>

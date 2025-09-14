@@ -119,7 +119,7 @@ export default function ConfirmDialog({
 						</Button>
 						<Button
 							type="button"
-							variant={confirmVariant as any}
+							variant={confirmVariant as "default" | "destructive" | "outline" | "secondary" | "ghost" | "link"}
 							onClick={handleConfirm}
 							disabled={confirming}
 						>

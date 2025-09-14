@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useAuth, hasPermission, PERMISSIONS } from "@/app/contexts/AuthContext";
-import { getEventDetails, approveEvent, declineEvent, publishEvent, deleteEvent, type Event, type EventImage } from "@/lib/api/events";
+import { getEventDetails, approveEvent, declineEvent, publishEvent, deleteEvent, type Event } from "@/lib/api/events";
 import { Card, CardContent, CardHeader, CardTitle } from "@/app/components/ui/card";
 import { Button } from "@/app/components/ui/button";
 import { Badge } from "@/app/components/ui/badge";
@@ -12,6 +12,7 @@ import { Edit, Trash2, CheckCircle, XCircle, Calendar, MapPin, Users, Clock, Ima
 import { Skeleton } from "@/app/components/ui/skeleton";
 import Link from "next/link";
 import { showToast } from "@/lib/utils/toast";
+import Image from "next/image";
 
 export default function EventDetailsPage() {
   const params = useParams();
@@ -22,7 +23,8 @@ export default function EventDetailsPage() {
   const [error, setError] = useState<string | null>(null);
   const [actionLoading, setActionLoading] = useState(false);
 
-  const eventId = (params as { id?: string }).id ?? (Array.isArray((params as any).id) ? (params as any).id[0] : (params as any).id);
+  const eventId = (params as { id?: string | string[] }).id;
+  const resolvedEventId = Array.isArray(eventId) ? eventId[0] : eventId;
 
   const canEditEvent = hasPermission(user?.roles || [], PERMISSIONS.EDIT_EVENT);
   const canApproveEvent = hasPermission(user?.roles || [], PERMISSIONS.APPROVE_EVENT);
@@ -33,7 +35,7 @@ export default function EventDetailsPage() {
     const loadEvent = async () => {
       try {
         setError(null);
-        const eventData = await getEventDetails(eventId);
+        const eventData = await getEventDetails(resolvedEventId as string);
         setEvent(eventData);
       } catch (err) {
         const errorMessage = err instanceof Error ? err.message : "Failed to load event";
@@ -45,10 +47,10 @@ export default function EventDetailsPage() {
       }
     };
 
-    if (eventId) {
+    if (resolvedEventId) {
       loadEvent();
     }
-  }, [eventId]);
+  }, [resolvedEventId]);
 
   const handleApproveEvent = async () => {
     if (!event) return;
@@ -257,9 +259,11 @@ export default function EventDetailsPage() {
       <div className="relative">
         {event.featured_image && (
           <div className="absolute inset-0 rounded-lg overflow-hidden">
-            <img
+            <Image
               src={event.featured_image.url}
               alt={event.title}
+              width={800}
+              height={256}
               className="w-full h-64 object-cover"
             />
             <div className="absolute inset-0 bg-black/40" />
@@ -370,9 +374,11 @@ export default function EventDetailsPage() {
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                   {event.gallery_images.map((image) => (
                     <div key={image.id} className="relative group cursor-pointer">
-                      <img
+                      <Image
                         src={image.url}
                         alt={image.filename}
+                        width={200}
+                        height={128}
                         className="w-full h-32 object-cover rounded-lg border transition-transform group-hover:scale-105"
                       />
                       <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg flex items-center justify-center">

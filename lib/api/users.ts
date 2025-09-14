@@ -2,10 +2,7 @@
  * User management API functions
  */
 
-import {
-  ApiResponse,
-  BasicResponse,
-} from "@/types/auth";
+import { ApiResponse } from "@/types/auth";
 import { apiGet, apiPatch, tokenManager } from "@/lib/utils/api";
 
 // User types based on API documentation

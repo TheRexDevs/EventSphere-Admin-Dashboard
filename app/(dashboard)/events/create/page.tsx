@@ -19,7 +19,6 @@ export default function CreateEventPage() {
   const router = useRouter();
   const { user } = useAuth();
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
   // Check permissions
   const canCreateEvent = hasPermission(user?.roles || [], PERMISSIONS.CREATE_EVENT);
@@ -43,7 +42,7 @@ export default function CreateEventPage() {
         <Card>
           <CardContent className="p-8 text-center">
             <h2 className="text-xl font-semibold text-gray-700 mb-2">Access Denied</h2>
-            <p className="text-gray-600">You don't have permission to create events.</p>
+            <p className="text-gray-600">You can&apos;t create events.</p>
             <Link href="/events">
               <Button className="mt-4">
                 Back to Events
@@ -60,7 +59,7 @@ export default function CreateEventPage() {
 
     try {
       setLoading(true);
-      setError(null);
+      // reset transient state
 
       // Basic validation
       if (!formData.title.trim()) throw new Error("Title is required");
@@ -79,14 +78,13 @@ export default function CreateEventPage() {
       router.push("/events");
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : "Failed to create event";
-      setError(errorMessage);
       showToast.error(errorMessage);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleInputChange = (field: keyof CreateEventFormData, value: any) => {
+  const handleInputChange = <K extends keyof CreateEventFormData>(field: K, value: CreateEventFormData[K]) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 

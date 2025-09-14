@@ -3,13 +3,13 @@
 import React, { useEffect, useState } from "react";
 import { useAuth, hasPermission, PERMISSIONS, ROLES } from "@/app/contexts/AuthContext";
 import { getUsers, getUserStats, updateUserStatus, type AdminUser, type UserStats } from "@/lib/api/users";
-import { Card, CardContent, CardHeader, CardTitle } from "@/app/components/ui/card";
+import { Card, CardContent } from "@/app/components/ui/card";
 import { Button } from "@/app/components/ui/button";
 import { Badge } from "@/app/components/ui/badge";
 import { Input } from "@/app/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/app/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/app/components/ui/table";
-import { Search, Filter, Eye, UserCheck, UserX, ChevronLeft, ChevronRight } from "lucide-react";
+import { Search, Eye, UserCheck, UserX, ChevronLeft, ChevronRight } from "lucide-react";
 import { Skeleton } from "@/app/components/ui/skeleton";
 import Link from "next/link";
 
@@ -18,7 +18,6 @@ export default function UsersPage() {
   const [users, setUsers] = useState<AdminUser[]>([]);
   const [stats, setStats] = useState<UserStats | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [roleFilter, setRoleFilter] = useState<string>("all");
   const [statusFilter, setStatusFilter] = useState<string>("all");
@@ -27,13 +26,12 @@ export default function UsersPage() {
 
   // Check permissions
   const canManageUsers = hasPermission(user?.roles || [], PERMISSIONS.MANAGE_USERS);
-  const canUpdateUserRoles = hasPermission(user?.roles || [], PERMISSIONS.UPDATE_USER_ROLES);
+  // const canUpdateUserRoles = hasPermission(user?.roles || [], PERMISSIONS.UPDATE_USER_ROLES);
   const canActivateDeactivateUsers = hasPermission(user?.roles || [], PERMISSIONS.ACTIVATE_DEACTIVATE_USERS);
 
   const loadUsers = async () => {
     try {
       setLoading(true);
-      setError(null);
 
       const [usersResponse, statsResponse] = await Promise.all([
         getUsers({
@@ -50,7 +48,7 @@ export default function UsersPage() {
       setStats(statsResponse);
       setTotalPages(usersResponse.total_pages);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to load users");
+      console.error("Failed to load users:", err);
     } finally {
       setLoading(false);
     }
@@ -60,6 +58,7 @@ export default function UsersPage() {
     if (canManageUsers) {
       loadUsers();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPage, searchTerm, roleFilter, statusFilter, canManageUsers]);
 
   const handleStatusToggle = async (userId: string, currentStatus: boolean) => {
@@ -67,7 +66,7 @@ export default function UsersPage() {
       await updateUserStatus(userId, { is_active: !currentStatus });
       await loadUsers(); // Reload the list
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to update user status");
+      console.error("Failed to update user status:", err);
     }
   };
 
@@ -86,7 +85,7 @@ export default function UsersPage() {
         <Card>
           <CardContent className="p-8 text-center">
             <h2 className="text-xl font-semibold text-gray-700 mb-2">Access Denied</h2>
-            <p className="text-gray-600">You don't have permission to manage users.</p>
+            <p className="text-gray-600">You can&apos;t manage users.</p>
           </CardContent>
         </Card>
       </div>

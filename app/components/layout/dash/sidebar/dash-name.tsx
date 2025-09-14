@@ -1,17 +1,17 @@
 "use client";
 
 import * as React from "react";
-import { ChevronsUpDown, Plus, Layers } from "lucide-react";
+// import { ChevronsUpDown, Plus, Layers } from "lucide-react";
 
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuLabel,
-	DropdownMenuSeparator,
-	DropdownMenuShortcut,
-	DropdownMenuTrigger,
-} from "@/app/components/ui/dropdown-menu";
+// import {
+// 	DropdownMenu,
+// 	DropdownMenuContent,
+// 	DropdownMenuItem,
+// 	DropdownMenuLabel,
+// 	DropdownMenuSeparator,
+// 	DropdownMenuShortcut,
+// 	DropdownMenuTrigger,
+// } from "@/app/components/ui/dropdown-menu";
 import {
 	SidebarMenu,
 	SidebarMenuButton,
@@ -20,7 +20,7 @@ import {
 } from "@/app/components/ui/sidebar";
 
 export function DashName({ name }: { name: string }) {
-	const { isMobile } = useSidebar();
+	// const { isMobile } = useSidebar();
 	const [activeDash, setActiveDash] = React.useState(name);
 
 	if (!activeDash) {

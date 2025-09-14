@@ -13,7 +13,7 @@ import {
 import { NavGroup } from "./nav-group";
 import { NavUser } from "./nav-user";
 import { DashName } from "./dash-name";
-import { useAuth, ROLES, isAdmin, hasPermission, PERMISSIONS } from "@/app/contexts/AuthContext";
+import { useAuth, hasPermission, PERMISSIONS } from "@/app/contexts/AuthContext";
 
 import {
 	Sidebar,
